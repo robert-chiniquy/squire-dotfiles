@@ -19,6 +19,26 @@ link() {
   ln -sfn "$from" "$to"
 }
 
+# Install a core set of CLI tools via nix when missing — no-op where the image
+# already ships them or nix is unavailable. Format: <binary>:<nixpkgs-attr>.
+install_tools() {
+  command -v nix >/dev/null 2>&1 || { echo "squire-dotfiles: nix absent, skipping tool install"; return 0; }
+  local want="zsh:zsh rg:ripgrep bat:bat fzf:fzf starship:starship zellij:zellij nvim:neovim"
+  local missing=() pair
+  for pair in $want; do
+    command -v "${pair%%:*}" >/dev/null 2>&1 || missing+=("nixpkgs#${pair##*:}")
+  done
+  if (( ${#missing[@]} )); then
+    echo "squire-dotfiles: nix installing ${missing[*]}"
+    nix profile install --extra-experimental-features 'nix-command flakes' "${missing[@]}" \
+      || echo "squire-dotfiles: some tools failed to install (continuing)"
+  else
+    echo "squire-dotfiles: core tools already present"
+  fi
+}
+
+install_tools
+
 count=0
 
 for entry in "$SRC"/home/*; do
