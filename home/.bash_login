@@ -1,0 +1,57 @@
+# === Locale ===
+export LC_ALL="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+export LANG="en_US.UTF-8"
+export LC_MESSAGES="en_US.UTF-8"
+export PYTHONIOENCODING="utf_8"
+
+# === Colors ===
+export CLICOLOR=1
+export LSCOLORS=Gxfxcxdxbxegedabagacad
+
+# === History ===
+HISTFILE="${HISTFILE:-$HOME/.bash_history}"
+HISTFILESIZE=500000
+HISTSIZE=1000000
+HISTCONTROL=ignoredups
+shopt -s histappend
+shopt -s cmdhist
+
+append_history() {
+  [[ -n "${HISTFILE:-}" ]] && history -a
+}
+trap append_history EXIT
+
+shopt -s checkwinsize
+
+# === PATH ===
+# Homebrew (macOS)
+[[ -d /opt/homebrew/bin ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+[[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
+
+# GNU coreutils (if installed)
+[[ -d /usr/local/opt/coreutils/libexec/gnubin ]] && PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+[[ -d /usr/local/opt/coreutils/libexec/gnuman ]] && MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+
+# Go
+[[ -d "$HOME/go/bin" ]] && PATH="$HOME/go/bin:$PATH"
+export GOPATH="$HOME/go"
+
+# Personal bin
+[[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
+
+# === Rust/Cargo ===
+[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
+
+# === Tools ===
+export ANSIBLE_NOCOWS=1
+export AWS_CLI_AUTO_PROMPT=on
+
+# Starship prompt
+command -v starship &>/dev/null && eval "$(starship init bash)"
+
+# FZF
+export FZF_DEFAULT_OPTS="--height 8 --reverse"
+
+# === Aliases ===
+alias sdiff='sdiff -d -W -B'

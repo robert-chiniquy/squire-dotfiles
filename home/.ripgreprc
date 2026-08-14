@@ -1,0 +1,22 @@
+# Vaporwave colors for ripgrep
+--colors=path:fg:0x5c,0xec,0xff
+--colors=path:style:bold
+--colors=line:fg:0xff,0xb1,0xfe
+--colors=match:fg:0xff,0x00,0xf8
+--colors=match:bg:0x2d,0x00,0x2d
+--colors=match:style:bold
+
+# Smart defaults
+--smart-case
+--hidden
+
+# Ignore patterns
+--glob=!.git
+--glob=!node_modules
+--glob=!vendor
+--glob=!__pycache__
+--glob=!cache
+--glob=!*.min.js
+--glob=!*.min.css
+--glob=!package-lock.json
+--glob=!yarn.lock
