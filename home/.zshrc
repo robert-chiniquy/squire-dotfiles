@@ -1,4 +1,4 @@
-. ~/.zprofile
+[ -r ~/.zprofile ] && . ~/.zprofile
 
 # Silence direnv (must be before hook)
 export DIRENV_LOG_FORMAT=$'\e[38;5;243mdirenv: %s\e[0m'
@@ -148,7 +148,7 @@ fi
 
 
 # === Starship prompt (must be in .zshrc, not .zprofile - needs zle) ===
-eval "$(starship init zsh)"
+command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
 
 # === Terminal title: last 2 dirs + git branch ===
 # Caches git state to avoid redundant git rev-parse calls
