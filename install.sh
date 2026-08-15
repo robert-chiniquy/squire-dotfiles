@@ -46,6 +46,14 @@ install_tools() {
     have bat || { command -v batcat >/dev/null 2>&1 && sudo ln -sf "$(command -v batcat)" /usr/local/bin/bat; }
   fi
 
+  # 2b. starship isn't in apt — fetch it via its official installer where still
+  #     missing (i.e. nix-less images), so the prompt config is actually used.
+  if have curl && ! have starship; then
+    echo "squire-dotfiles: installing starship (not in apt)"
+    timeout 90 sh -c 'curl -fsSL https://starship.rs/install.sh | sudo sh -s -- -y -b /usr/local/bin' >/dev/null 2>&1 \
+      || echo "squire-dotfiles: starship install skipped"
+  fi
+
   # 3. Make zsh the login shell once it exists (config is only useful as $SHELL).
   if have zsh; then
     local zsh_path; zsh_path="$(command -v zsh)"
